@@ -40,7 +40,7 @@
 
 
           function needsAuth(api) {
-              var authPluginNames = ['basic-auth','key-auth','jwt-auth','oauth2','hmac-auth'];
+              var authPluginNames = ['basic-auth', 'basic-auth-x','key-auth','jwt-auth','oauth2','hmac-auth'];
               return _.filter(api.plugins.data,function(item){
                       return authPluginNames.indexOf(item.name) > -1 && item.enabled;
                   }).length > 0;
