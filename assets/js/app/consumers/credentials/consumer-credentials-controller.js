@@ -19,6 +19,7 @@
         $scope.keys;
         $scope.jwts;
         $scope.basic_auth_credentials;
+        $scope.basic_auth_x_credentials;
         $scope.hmac_auth_credentials;
         $scope.oauth2_credentials;
 
@@ -28,6 +29,12 @@
             name: 'BASIC',
             icon: 'mdi-account-outline',
             fetchFunc: fetchBasicAuthCredentials
+          },
+          {
+            id: 'basic-auth-x',
+            name: 'BASIC-X',
+            icon: 'mdi-account-outline',
+            fetchFunc: fetchBasicAuthXCredentials
           },
           {
             id: 'key-auth',
@@ -73,12 +80,14 @@
         $scope.createApiKey = createApiKey
         $scope.createJWT = createJWT
         $scope.manageBasicAuth = manageBasicAuth
+        $scope.manageBasicAuthX = manageBasicAuthX
         $scope.createOAuth2 = createOAuth2
         $scope.createHMAC = createHMAC
         $scope.deleteKey = deleteKey
         $scope.deleteJWT = deleteJWT
         $scope.deleteOAuth2 = deleteOAuth2
         $scope.deleteBasicAuthCredentials = deleteBasicAuthCredentials
+        $scope.deleteBasicAuthXCredentials = deleteBasicAuthXCredentials
         $scope.deleteHMACAuthCredentials = deleteHMACAuthCredentials
         $scope.setActiveGroup = setActiveGroup;
         $scope.filterGroup = filterGroup;
@@ -122,6 +131,24 @@
                   function onSuccess(result) {
                     MessageService.success('Credentials deleted successfully');
                     fetchBasicAuthCredentials()
+                  }
+                )
+
+            }, function decline() {
+            })
+        }
+
+        function deleteBasicAuthXCredentials($index, credentials) {
+          DialogService.confirm(
+            "Delete Credentials", "Really want to delete the selected credentials?",
+            ['No don\'t', 'Yes! delete it'],
+            function accept() {
+              ConsumerService
+                .removeCredential($scope.consumer.id, 'basic-auth-x', credentials.username)
+                .then(
+                  function onSuccess(result) {
+                    MessageService.success('Credentials deleted successfully');
+                    fetchBasicAuthXCredentials()
                   }
                 )
 
@@ -219,6 +246,25 @@
           });
         }
 
+        function manageBasicAuthX(cred) {
+          $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'js/app/consumers/credentials/manage-basic-auth-x-modal.html',
+            controller: 'ManageBasicAuthXController',
+            controllerAs: '$ctrl',
+            resolve: {
+              _consumer: function () {
+                return $scope.consumer
+              },
+              _cred: function () {
+                return cred
+              }
+            }
+          });
+        }
+
         function createOAuth2() {
           $uibModal.open({
             animation: true,
@@ -292,6 +338,14 @@
             })
         }
 
+        function fetchBasicAuthXCredentials() {
+          ConsumerService.loadCredentials($scope.consumer.id, 'basic-auth-x')
+            .then(function (res) {
+              console.log("FETCH BASIC AUTH X CREDS =>", res.data);
+              $scope.basic_auth_x_credentials = res.data;
+            })
+        }
+
         function fetchHMACAuthCredentials() {
           ConsumerService.loadCredentials($scope.consumer.id, 'hmac-auth')
             .then(function (res) {
@@ -350,6 +404,9 @@
           fetchBasicAuthCredentials()
         })
 
+        $scope.$on('consumer.basic-auth-x.created', function (ev, group) {
+          fetchBasicAuthXCredentials()
+        })
 
         $scope.$on('consumer.hmac-auth.created', function (ev, group) {
           fetchHMACAuthCredentials()
