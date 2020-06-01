@@ -93,6 +93,7 @@ var KongConsumersController = {
       let hmacAuths = [];
       let oauth2 = [];
       let basicAuths = [];
+      let basicAuthX = [];
 
       // ToDo: clean this up somehow
       if(_.get(nodeInfo, 'plugins.available_on_server.jwt')) {
@@ -120,6 +121,11 @@ var KongConsumersController = {
         basicAuths = _.filter(basicAuthsRecs.data, item => _.get(item, 'consumer.id') === consumerId);
       }
 
+      if(_.get(nodeInfo, 'plugins.available_on_server.basic-auth-x')) {
+        let basicAuthXRecs = await Kong.fetch(`/consumers/${consumerId}/basic-auth-x`, req);
+        basicAuthX = _.filter(basicAuthXRecs.data, item => _.get(item, 'consumer.id') === consumerId);
+      }
+
 
       // Gather the credentials that belong to the consumer
       let consumerAuths = [];
@@ -128,6 +134,7 @@ var KongConsumersController = {
       if(hmacAuths.length) consumerAuths.push('hmac-auth');
       if(oauth2.length) consumerAuths.push('oauth2');
       if(basicAuths.length) consumerAuths.push('basic-auth');
+      if(basicAuthX.length) consumerAuths.push('basic-auth-x');
 
       sails.log("KongConsumersController:services:consumerAuths", consumerAuths)
 
@@ -164,7 +171,7 @@ var KongConsumersController = {
         let acl = _.find(service.plugins,item => item.name === 'acl');
         if(acl) service.acl = acl;
 
-        let authenticationPlugins = _.filter(service.plugins, item => ['jwt','basic-auth','key-auth','hmac-auth','oauth2'].indexOf(item.name) > -1);
+        let authenticationPlugins = _.filter(service.plugins, item => ['jwt','basic-auth', 'basic-auth-x','key-auth','hmac-auth','oauth2'].indexOf(item.name) > -1);
         authenticationPlugins = _.map(authenticationPlugins, item => item.name);
         sails.log("authenticationPlugins",authenticationPlugins);
         service.auths = authenticationPlugins;
@@ -254,6 +261,7 @@ var KongConsumersController = {
       let hmacAuths = [];
       let oauth2 = [];
       let basicAuths = [];
+      let basicAuthX = [];
 
       // ToDo: clean this up somehow
       if(_.get(nodeInfo, 'plugins.available_on_server.jwt')) {
@@ -281,6 +289,11 @@ var KongConsumersController = {
         basicAuths = _.filter(basicAuthsRecs.data, item => _.get(item, 'consumer.id') === consumerId);
       }
 
+      if(_.get(nodeInfo, 'plugins.available_on_server.basic-auth-x')) {
+        let basicAuthXRecs = await Kong.fetch(`/consumers/${consumerId}/basic-auth-x`, req);
+        basicAuthX = _.filter(basicAuthXRecs.data, item => _.get(item, 'consumer.id') === consumerId);
+      }
+
 
       let consumerAuths = []
       if(jwts.length) consumerAuths.push('jwt');
@@ -288,6 +301,8 @@ var KongConsumersController = {
       if(hmacAuths.length) consumerAuths.push('hmac-auth');
       if(oauth2.length) consumerAuths.push('oauth2');
       if(basicAuths.length) consumerAuths.push('basic-auth');
+      if(basicAuthX.length) consumerAuths.push('basic-auth-x');
+
 
       sails.log("consumerAuths", consumerAuths)
 
@@ -336,7 +351,7 @@ var KongConsumersController = {
           // Add plugins to their respective service
           routes[index].plugins = plugins;
 
-          let authenticationPlugins = _.filter(plugins.data, item => ['jwt','basic-auth','key-auth','hmac-auth','oauth2'].indexOf(item.name) > -1);
+          let authenticationPlugins = _.filter(plugins.data, item => ['jwt','basic-auth', 'basic-auth-x','key-auth','hmac-auth','oauth2'].indexOf(item.name) > -1);
           authenticationPlugins = _.map(authenticationPlugins, item => item.name);
           sails.log("authenticationPlugins",authenticationPlugins);
           routes[index].auths = authenticationPlugins;
