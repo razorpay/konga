@@ -3,7 +3,6 @@ name: CI
   - push
 jobs:
   cancel:
-    runs-on: [ self-hosted, non-api ]
     name: Cancel Previous Runs
     if: always()
     steps:
