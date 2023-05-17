@@ -1,4 +1,4 @@
-FROM node:12.16-alpine
+FROM c.rzp.io/razorpay/onggi:rzp-golden-image-node19.7
 
 COPY . /app
 
