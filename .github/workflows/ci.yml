@@ -3,6 +3,7 @@ name: CI
   - push
 jobs:
   cancel:
+    runs-on: ubuntu-latest
     name: Cancel Previous Runs
     if: always()
     steps:
@@ -19,6 +20,7 @@ jobs:
           echo "Don't cancel old workflow"
 
   build:
+    runs-on: ubuntu-latest
     name: Docker image
     steps:
       - uses: actions/checkout@v3
