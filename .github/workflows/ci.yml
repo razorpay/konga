@@ -3,6 +3,7 @@ name: CI
   - push
 jobs:
   cancel:
+    runs-on: ubuntu-latest
     name: Cancel Previous Runs
     if: always()
     steps:
@@ -20,7 +21,6 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' # Running this job only for master branch
 
     steps:
       - uses: actions/checkout@v2 # Checking out the repo
