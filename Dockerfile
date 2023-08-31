@@ -1,15 +1,13 @@
-FROM node:12.16-alpine
+FROM --platform=$BUILDPLATFORM node:12.16-alpine
 
-# Install Python 2 and other necessary packages
-RUN apk update && apk add --no-cache python2 make g++
+ARG TARGETARCH
+RUN apk add --update --no-cache --repository https://dl-4.alpinelinux.org/alpine/latest-stable/community/$TARGETARCH/ python2 make g++ bash git ca-certificates
 
 COPY . /app
 
 WORKDIR /app
 
-RUN apk upgrade --update \
-    && apk add bash git ca-certificates \
-    && npm install -g bower \
+RUN npm install -g bower \
     && npm --unsafe-perm --production install \
     && apk del git \
     && rm -rf /var/cache/apk/* \
