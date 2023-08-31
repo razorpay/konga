@@ -14,15 +14,15 @@ concurrency:
 jobs:
     build:
       name: Docker image
-      runs-on: [ self-hosted, non-api ]
+      runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v3
-        - name: Login to Harbor
+        - name: Login to GitHub Container Registry
           uses: docker/login-action@v1
           with:
-            registry: c.rzp.io
-            username: ${{ secrets.HARBOR_DOCKER_USERNAME }}
-            password: ${{ secrets.HARBOR_DOCKER_PASSWORD }}
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
 
         - name: Set up Docker Buildx
           id: buildx
@@ -38,4 +38,4 @@ jobs:
             file: Dockerfile
             platforms: linux/arm64,linux/amd64
             push: true
-            tags: c.rzp.io/${{ github.repository }}:${{ github.sha }}
+            tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
