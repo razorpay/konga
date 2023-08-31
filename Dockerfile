@@ -1,5 +1,8 @@
 FROM node:12.16-alpine
 
+# Install Python 2 and other necessary packages
+RUN apk update && apk add --no-cache python2 make g++
+
 COPY . /app
 
 WORKDIR /app
