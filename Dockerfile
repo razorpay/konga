@@ -7,7 +7,8 @@ COPY . /app
 
 WORKDIR /app
 
-RUN npm install -g bower \
+RUN npm config set unsafe-perm true \
+    && npm install -g bower \
     && npm --unsafe-perm --production install \
     && apk del git \
     && rm -rf /var/cache/apk/* \
