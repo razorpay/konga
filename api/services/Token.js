@@ -7,6 +7,16 @@
  */
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
+var crypto = require('crypto');
+
+// Generate a secure fallback secret if TOKEN_SECRET is not set
+function getTokenSecret() {
+  if (!process.env.TOKEN_SECRET) {
+    console.error('ERROR: TOKEN_SECRET environment variable not set. Application will exit.');
+    process.exit(1);
+  }
+  return process.env.TOKEN_SECRET;
+}
 
 /**
  * Service method to generate a new token based on payload we want to put on it.
@@ -20,7 +30,7 @@ module.exports.issue = function issue(payload) {
 
     return jwt.sign(
         payload, // This is the payload we want to put inside the token
-        process.env.TOKEN_SECRET || "oursecret" // Secret string which will be used to sign the token
+        getTokenSecret() // Secret string which will be used to sign the token
     );
 };
 
@@ -60,7 +70,7 @@ module.exports.verify = function verify(token, next) {
 
     return jwt.verify(
         token, // The token to be verified
-        process.env.TOKEN_SECRET || "oursecret", // The secret we used to sign it.
+        getTokenSecret(), // The secret we used to sign it.
         {}, // Options, none in this case
         next // The callback to be call when the verification is done.
     );

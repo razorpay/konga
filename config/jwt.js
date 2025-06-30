@@ -2,7 +2,13 @@
 
 module.exports = {
   jwt: {
-    secret: '8fe171f3-0046-4df5-9216-14099434339f',
+    secret: (function() {
+      if (!process.env.JWT_SECRET) {
+        console.error('ERROR: JWT_SECRET environment variable not set. Application will exit.');
+        process.exit(1);
+      }
+      return process.env.JWT_SECRET;
+    })(),
     sign: {
       algorithm: 'HS512',
       expiresInMinutes: 1,

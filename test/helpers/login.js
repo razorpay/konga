@@ -12,6 +12,7 @@ var request = require("supertest");
  */
 module.exports.authenticate = function authenticate(user, next) {
     // Static credential information, which are used within tests.
+    // NOTE: These are test-only credentials and should NEVER be used in production
     var credentials = {
         demo: {
             identifier: 'demo',

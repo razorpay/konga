@@ -237,10 +237,13 @@ passport.callback = function callback(request, response, next) {
       protocol: 'oauth2',
       scope: [ 'user', 'gist' ]
       options: {
-        clientID: 'CLIENT_ID',
-        clientSecret: 'CLIENT_SECRET'
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET
       }
     }
+ *
+ * IMPORTANT: Never hardcode client secrets in your configuration.
+ * Always use environment variables for sensitive credentials.
  *
  * For more information on the providers supported by Passport.js, check out:
  * http://passportjs.org/guide/providers/
