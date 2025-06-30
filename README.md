@@ -293,3 +293,56 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
+
+## Security Configuration
+
+**IMPORTANT**: For production deployments, you must set the following environment variables to secure values:
+
+### Required Environment Variables
+
+- `TOKEN_SECRET`: A secure secret used for JWT token signing (minimum 64 characters recommended)
+- `JWT_SECRET`: A secure secret used for JWT authentication (minimum 64 characters recommended)
+
+### Generating Secure Secrets
+
+You can generate cryptographically secure secrets using Node.js:
+
+```bash
+# Generate a secure secret
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+```
+
+### Environment Variable Setup
+
+Create a `.env` file in your project root (copy from `.env_example`):
+
+```bash
+cp .env_example .env
+```
+
+Then edit the `.env` file and replace the placeholder values with your own secure secrets:
+
+```env
+TOKEN_SECRET=your_generated_secure_token_secret_here
+JWT_SECRET=your_generated_secure_jwt_secret_here
+```
+
+### Security Best Practices
+
+1. **Never commit secrets to version control**
+2. **Use different secrets for different environments** (development, staging, production)
+3. **Rotate secrets regularly**
+4. **Use environment variables or secure secret management systems**
+5. **Ensure secrets have sufficient entropy** (use the crypto.randomBytes method shown above)
+
+### OAuth Configuration
+
+If you're using external OAuth providers, set the appropriate environment variables:
+
+```env
+# GitHub OAuth (example)
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+```
+
+**Never hardcode client secrets in your configuration files.**
