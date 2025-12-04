@@ -39,13 +39,13 @@
     "moment": "^2.25.1",
     "node-cron": "^1.2.1",
     "node-sass": "^4.13.1",
-    "nodemailer": "^4.7.0",
+    "nodemailer": "^7.0.11",
     "nodemailer-mailgun-transport": "^1.4.0",
     "passport": "0.3.0",
     "passport-ldapauth": "^2.1.4",
     "passport-local": "1.0.0",
     "rc": "^1.2.8",
-    "sails": "~0.12.14",
+    "sails": "^1.5.15",
     "sails-disk": "^0.10.10",
     "sails-mongo": "^0.12.3",
     "sails-mysql": "^0.11.5",
@@ -77,5 +77,8 @@
     "url": "https://github.com/pantsel/konga.git"
   },
   "author": "Tselentis Panagis",
-  "license": "MIT"
+  "license": "MIT",
+  "overrides": {
+    "https-proxy-agent": "^7.0.6"
+  }
 }
